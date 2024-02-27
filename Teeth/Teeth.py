@@ -1,6 +1,6 @@
 import adsk.core, adsk.fusion, traceback, math
 
-id = 'com.autodesk.fusion360.addins.teeth'
+id = 'com-autodesk-fusion360-addins-teeth'
 name = 'Gear'
 description = 'Sketches a gear.'
 
@@ -23,7 +23,7 @@ def run(context):
     panel.controls.addCommand(command)
     inward = Inward()
     factories.append(inward)
-    invertedId = id + '.inverted'
+    invertedId = id + '-inverted'
     command = ui.commandDefinitions.itemById(invertedId)
     if not command: command = ui.commandDefinitions.addButtonDefinition(invertedId, name + ' (Inverted)', description, './resources')
     command.commandCreated.add(inward)
