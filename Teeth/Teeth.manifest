@@ -1,0 +1,11 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"com.autodesk.fusion360.addins.teeth",
+	"author":	"DataDink",
+	"description":	{ "":	"Adds gears to the sketch create menu" },
+	"version":	"0.0.0",
+	"runOnStartup":	true,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	false
+}
