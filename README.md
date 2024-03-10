@@ -13,19 +13,16 @@
 
 The menu item will add a new gear to the sketch.
 
-<img src="./resources/create-menu.jpg" style="width: 25em"/>
+<img src="./resources/create-menu.jpg" style="height: 30em"/>
 
 The gear can then be configured by adjusting its dimensions:
 
-* **Orientation:** The rotation of the gear.
-  * This dimension can be deleted and a coincident with one of the teeth can be used instead.
-* **Spacing:** The distance between the teeth.
-  * Set this to the same value for all of the gears that will be interlocking.
-  * The actual spacing will vary slightly based on the gear radius.
-* **Radius:** This is the radius of the gears edge.
-  * For inverted gears this will be the inner point of the teeth.
+* **Edge:** The diameter of the gear.
+* **Pitch:** The distance between teeth.
+* **Point:** The angle of the teeth.
+* **Azimuth:** The rotation of the gear.
 
-<img src="./resources/gear-configuration.jpg" style="width: 25em"/>
+<img src="./resources/gear-configuration.jpg" style="height: 30em"/>
 
 ## Safety
 
@@ -66,6 +63,10 @@ Here are some measures to take:
 
 ## Notes
 
+* **v0.1.0**
+  * Feature: Adds a "Gear" menu group containing "External" and "Internal" gears
+  * Feature: Sketch parameters are more appropriately named
+  * Fix: Gears have simpler structures
 * **v0.0.0**
   * Feature: Adds "Gear" and "Gear (Inverted)" to the "Create" menu in the "Sketch" space
   * Feature: Draws a gear in the sketch so that the dimensions can be edited (no inputs/dialogs needed)
