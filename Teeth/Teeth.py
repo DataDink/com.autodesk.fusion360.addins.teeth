@@ -76,6 +76,9 @@ def draw(internal: bool):
   slope = (point-pitch)/2 if internal else (point+pitch)/2
   depth = math.cos(slope)/math.sin(slope)*circ/count/2
   iface = radi + depth if internal else radi - depth
+  # The origin point
+  origin = sketch.sketchPoints.add(pt(0, 0, 0))
+  origin.isFixed = True
   # Pitch measure
   measure = ln(pt(-pitchInit/2, 0, 0), pt(pitchInit/2, 0, 0))
   measure.isConstruction = True
@@ -83,24 +86,25 @@ def draw(internal: bool):
   name = dimPitch.name
   dimPitch.name = name + 'Pitch'
   const.addHorizontal(measure)
+  const.addMidPoint(origin, measure)
   # The root circle
   edge = cir(pt(0, 0, 0), radi)
   edge.isConstruction = True
   dimEdge = dim.addDiameterDimension(edge, pt(radi/2, 0, 0)).parameter
   dimEdge.name = name + 'Edge'
-  const.addMidPoint(edge.centerSketchPoint, measure)
+  const.addCoincident(origin, edge.centerSketchPoint)
   # The addendum circle
-  base = cir(edge.centerSketchPoint.geometry, iface)
+  base = cir(origin.geometry, iface)
   base.isConstruction = True
   dimBase = dim.addDiameterDimension(base, pt(iface/-2, 0, 0), False).parameter
   dimBase.name = name + 'Base'
-  const.addConcentric(edge, base)
+  const.addCoincident(origin, base.centerSketchPoint)
   # The center line
   center = ln(pt(0, iface, 0), pt(0, radi, 0))
   center.isCenterLine = True
   const.addCoincident(center.startSketchPoint, base)
   const.addCoincident(center.endSketchPoint, edge)
-  const.addCoincident(edge.centerSketchPoint, center)
+  const.addCoincident(origin, center)
   const.addVertical(center)
   # The azimuth line
   azi = ln(pt(math.sin(pitch)*iface, math.cos(pitch)*iface, 0), pt(math.sin(pitch)*radi, math.cos(pitch)*radi, 0))
@@ -109,20 +113,20 @@ def draw(internal: bool):
   dimAzi.name = name + 'Azimuth'
   const.addCoincident(azi.startSketchPoint, base)
   const.addCoincident(azi.endSketchPoint, edge)
-  const.addCoincident(edge.centerSketchPoint, azi)
+  const.addCoincident(origin, azi)
   # The tooth
   left = ln(pt(math.sin(pitch*.5)*iface, math.cos(pitch*.5)*iface, 0), pt(math.sin(pitch*.5)*radi, math.cos(pitch*.5)*radi, 0))
   left.isConstruction = True
   const.addCoincident(left.startSketchPoint, base)
   const.addCoincident(left.endSketchPoint, edge)
-  const.addCoincident(edge.centerSketchPoint, left)
+  const.addCoincident(origin, left)
   right = ln(pt(math.sin(pitch*1.5)*iface, math.cos(pitch*1.5)*iface, 0), pt(math.sin(pitch*1.5)*radi, math.cos(pitch*1.5)*radi, 0))
   right.isConstruction = True
   const.addCoincident(right.startSketchPoint, base)
   const.addCoincident(right.endSketchPoint, edge)
-  const.addCoincident(edge.centerSketchPoint, right)
+  const.addCoincident(origin, right)
   dimSpan = dim.addAngularDimension(left, right, pt(math.sin(pitch)*radi/2, math.cos(pitch)*radi/2, 0)).parameter
-  dimSpan.name = name + 'PitchAngle'
+  dimSpan.name = name + 'Angle'
   midl = ln(left.startSketchPoint, azi.endSketchPoint)
   midr = ln(right.startSketchPoint, azi.endSketchPoint)
   const.addEqual(midl, midr)
@@ -130,11 +134,13 @@ def draw(internal: bool):
   dimPoint.name = name + 'Point'
   dimPoint.value = point
   # The pattern
-  input = const.createCircularPatternInput([midl, midr], edge.centerSketchPoint)
-  input.quantity = adsk.core.ValueInput.createByString('floor((' + dimEdge.name + '/1' + dimEdge.unit + ')*PI/(' + dimPitch.name + '/1' + dimPitch.unit + '))')
+  input = const.createCircularPatternInput([midl, midr], origin)
+  input.quantity = adsk.core.ValueInput.createByString('round((' + dimEdge.name + '/1' + dimEdge.unit + ')*PI/(' + dimPitch.name + '/1' + dimPitch.unit + '))')
   input.totalAngle = adsk.core.ValueInput.createByString('360 deg')
   pattern = const.addCircularPattern(input)
   pattern.quantity.name = name + 'Count'
   dimSpan.expression = '360 deg /' + pattern.quantity.name
   dimAzi.expression = dimSpan.name
-
+  origin.isFixed = False
+  origin.move(adsk.core.Vector3D.create(1, 1, 0)) # HACK: Possible Bug: If the pattern has to recalculate at 0,0,0 it seems to bind the center point to the sketch origin.
+  

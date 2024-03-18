@@ -63,6 +63,8 @@ Here are some measures to take:
 
 ## Notes
 
+* **v0.1.1**
+  * Fix: switching from "floor()" to "round()" reducing pitch variance
 * **v0.1.0**
   * Feature: Adds a "Gear" menu group containing "External" and "Internal" gears
   * Feature: Sketch parameters are more appropriately named
