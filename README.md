@@ -65,6 +65,7 @@ Here are some measures to take:
 
 * **v0.1.1**
   * Fix: switching from "floor()" to "round()" reducing pitch variance
+  * Feature: The pitch measure will no run along the Z axis both to reduce clutter and allow it to be used as a sweep path
 * **v0.1.0**
   * Feature: Adds a "Gear" menu group containing "External" and "Internal" gears
   * Feature: Sketch parameters are more appropriately named

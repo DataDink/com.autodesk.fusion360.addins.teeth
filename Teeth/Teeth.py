@@ -80,12 +80,11 @@ def draw(internal: bool):
   origin = sketch.sketchPoints.add(pt(0, 0, 0))
   origin.isFixed = True
   # Pitch measure
-  measure = ln(pt(-pitchInit/2, 0, 0), pt(pitchInit/2, 0, 0))
+  measure = ln(pt(0, 0, -pitchInit/2), pt(0, 0, pitchInit/2))
   measure.isConstruction = True
   dimPitch = dim.addDistanceDimension(measure.startSketchPoint, measure.endSketchPoint, aligned, pt(0, radi/8, 0)).parameter
   name = dimPitch.name
   dimPitch.name = name + 'Pitch'
-  const.addHorizontal(measure)
   const.addMidPoint(origin, measure)
   # The root circle
   edge = cir(pt(0, 0, 0), radi)
